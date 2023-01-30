@@ -35,6 +35,7 @@ const setupViewport = (gl, canvas) => {
 const run = () => {
     const canvas = document.getElementById('gl')
     const gl = canvas.getContext('webgl')
+    gl.enable(gl.DEPTH_TEST)
 
     const vert = document.getElementById('vert').text
     const frag = document.getElementById('frag').text
@@ -51,7 +52,10 @@ const run = () => {
     initBuffer(gl, sphere, gl.STATIC_DRAW)
     initAttribute(gl, 'position', 3, 3, 0, false, Float32Array.BYTES_PER_ELEMENT)
 
+    const offsetScale = .0005
+    const offsetLocation = gl.getUniformLocation(gl.program, 'offset')
     const tick = time => {
+        gl.uniform1f(offsetLocation, time*offsetScale);
         gl.drawArrays(gl.TRIANGLES, 0, NUM_VERTEX)
         window.requestAnimationFrame(tick)
     }
