@@ -7,6 +7,19 @@
     <body>
         <canvas id="gl" />
     </body>
+    <script type="glsl" id="vert">
+        attribute vec4 position;
+        uniform mat4 projMatrix;
+        uniform mat4 viewMatrix;
+        void main() {
+            gl_Position = projMatrix * viewMatrix * position;
+        }
+    </script>
+    <script type="glsl" id="frag">
+        void main() {
+            gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+        }
+    </script>
     <script src="src/gl-matrix-min.js"></script>
     <script src="src/gl-help.js"></script>
     <script src="src/ico.js"></script>

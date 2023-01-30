@@ -1,29 +1,24 @@
 // load shader from string, returns promise
-const loadShader = (gl, type, path) => {
-    return fetch(path)
-        .then(res => res.text())
-        .then(source => {
-            const shader = gl.createShader(type)
-            gl.shaderSource(shader, source)
-            gl.compileShader(shader)
-            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-                console.error(gl.getShaderInfoLog(shader))
-            }
-            return shader
-        })
-        .catch(err => console.log(err))
+const loadShader = (gl, type, source) => {
+    const shader = gl.createShader(type)
+    gl.shaderSource(shader, source)
+    gl.compileShader(shader)
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        console.error(gl.getShaderInfoLog(shader))
+    }
+    return shader
 }
 
-// load shaders from file and create program
-const loadProgram = async (gl, vertexPath, fragmentPath) => {
-    const [vertShader, fragShader] = await Promise.all([
-        loadShader(gl, gl.VERTEX_SHADER, vertexPath),
-        loadShader(gl, gl.FRAGMENT_SHADER, fragmentPath)
-    ])
+// load shaders and create program
+const loadProgram = (gl, vertexSource, fragmentSource) => {
+    const vertShader = loadShader(gl, gl.VERTEX_SHADER, vertexSource)
+    const fragShader = loadShader(gl, gl.FRAGMENT_SHADER, fragmentSource)
     const program = gl.createProgram()
     gl.attachShader(program, vertShader)
     gl.attachShader(program, fragShader)
     gl.linkProgram(program)
+    gl.useProgram(program)
+    gl.program = program
     return program
 }
 
