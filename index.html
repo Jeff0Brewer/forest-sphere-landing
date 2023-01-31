@@ -97,30 +97,42 @@
         uniform mat4 projMatrix;
         uniform mat4 viewMatrix;
         uniform float offset;
+        uniform float screenAspect;
+        uniform float imageAspect;
         varying vec3 warped;
         varying vec3 normal;
         varying vec2 texcoord;
 
         vec3 warp(vec3 pos, float offset) {
             float warpScale = .1;
-            return pos*(1.0 - warpScale) + pos*cnoise(pos + cnoise(1.2*pos) + offset)*warpScale;
+            return pos*(1.0 - warpScale) + pos*cnoise(pos + cnoise(pos) + offset)*warpScale;
         }
 
-        void main() {
+        vec3 getWarpNorm(vec3 position, vec3 warped) {
             float normOffset = 0.2;
-            vec3 nz = vec3(0.0, -1.0, 0.0);
-            vec3 tangA = cross(position.xyz, nz);
+            vec3 ny = vec3(0.0, -1.0, 0.0);
+            vec3 tangA = cross(position.xyz, ny);
             vec3 tangB = cross(position.xyz, tangA);
             vec3 posA = normalize(position.xyz + tangA*normOffset);
             vec3 posB = normalize(position.xyz + tangB*normOffset);
             vec3 warpA = warp(posA, offset);
             vec3 warpB = warp(posB, offset);
+            return cross(warpA - warped, warpB - warped);
+        }
+
+        vec2 getTexCoordBound(float texAspect, float screenAspect) {
+            return vec2(min(screenAspect/imageAspect, 1.0), min(imageAspect/screenAspect, 1.0));
+        }
+
+        void main() {
             warped = warp(position.xyz, offset);
-            normal = cross(warpA - warped, warpB - warped);
+            normal = getWarpNorm(position.xyz, warped);
             gl_Position = projMatrix * viewMatrix * vec4(warped, 1.0);
+
             vec3 clip = gl_Position.xyz / gl_Position.w;
             texcoord = (clip.xy + 1.0)*.5;
             texcoord.y = 1.0 - texcoord.y;
+            texcoord = texcoord*getTexCoordBound(imageAspect, screenAspect);
         }
     </script>
     <script type="glsl" id="frag">
@@ -145,7 +157,6 @@
         }
     </script>
     <script src="src/gl-matrix-min.js"></script>
-    <script src="src/gl-help.js"></script>
     <script src="src/ico.js"></script>
     <script src="src/draw.js"></script>
 </html>
