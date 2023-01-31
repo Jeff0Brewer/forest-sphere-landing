@@ -100,12 +100,11 @@
 
         vec3 warp(vec3 pos, float offset) {
             float warpScale = .1;
-            float noiseScale = 1.6;
-            return pos*(1.0 - warpScale) + pos*cnoise(noiseScale*pos + offset)*warpScale;
+            return pos*(1.0 - warpScale) + pos*cnoise(pos + cnoise(1.5*pos) + offset)*warpScale;
         }
 
         void main() {
-            float normOffset = 0.05;
+            float normOffset = 0.2;
             vec3 nz = vec3(0.0, -1.0, 0.0);
             vec3 tangA = cross(position.xyz, nz);
             vec3 tangB = cross(position.xyz, tangA);
@@ -132,7 +131,7 @@
             vec3 lightNorm = normalize(lightPos - warped);
             vec3 lightReflect = 2.0*fragNorm*dot(fragNorm, lightNorm) - lightNorm;
 
-            float specular = pow(clamp(dot(warped, lightReflect), 0.0, 1.0), 4.0);
+            float specular = pow(clamp(dot(warped, lightReflect), 0.0, 1.0), 6.0);
             float shade = clamp(dot(fragNorm, lightNorm), 0.0, 1.0);
             float ambient = 0.2;
 
