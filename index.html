@@ -99,12 +99,12 @@
 
         vec3 warp(vec3 pos, float offset) {
             float warpScale = .1;
-            float noiseScale = 1.5;
+            float noiseScale = 1.6;
             return pos*(1.0 - warpScale) + pos*cnoise(noiseScale*pos + offset)*warpScale;
         }
 
         void main() {
-            float normOffset = 0.1;
+            float normOffset = 0.05;
             vec3 nz = vec3(0.0, -1.0, 0.0);
             vec3 tangA = cross(position.xyz, nz);
             vec3 tangB = cross(position.xyz, tangA);
