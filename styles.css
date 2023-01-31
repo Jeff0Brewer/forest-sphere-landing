@@ -3,11 +3,21 @@ body, html {
     padding: 0;
 }
 
+.wrap {
+    background-size: cover;
+    background-image:
+        linear-gradient(to right, #222 0%, #222 15%, transparent 200%),
+        url('forest.jpg');
+}
+
 #gl {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
     width: 100vw;
     height: 100vh;
-    background-color: #000;
+}
+
+.person {
+
 }
