@@ -29,6 +29,7 @@ const setupViewport = (gl, canvas) => {
             false,
             getProjMatrix(w/h)
         )
+        gl.uniform2fv(gl.getUniformLocation(gl.program, 'screenDim'), [w*dpr, h*dpr])
     }
 }
 
@@ -51,7 +52,7 @@ const run = () => {
     )
     initBuffer(gl, sphere, gl.STATIC_DRAW)
     initAttribute(gl, 'position', 3, 3, 0, false, Float32Array.BYTES_PER_ELEMENT)
-    createTexture(gl, 'forest-tex.jpg')
+    createTexture(gl, 'forest.jpg')
 
     const offsetScale = .0005
     const offsetLocation = gl.getUniformLocation(gl.program, 'offset')

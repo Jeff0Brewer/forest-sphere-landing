@@ -5,7 +5,10 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <canvas id="gl" />
+        <section class="wrap">
+            <div class="person"></div>
+            <canvas id="gl" />
+        </section>
     </body>
     <script type="glsl" id="vert">
         float rand(vec2 co){
@@ -100,7 +103,7 @@
 
         vec3 warp(vec3 pos, float offset) {
             float warpScale = .1;
-            return pos*(1.0 - warpScale) + pos*cnoise(pos + cnoise(1.5*pos) + offset)*warpScale;
+            return pos*(1.0 - warpScale) + pos*cnoise(pos + cnoise(1.2*pos) + offset)*warpScale;
         }
 
         void main() {
@@ -114,9 +117,10 @@
             vec3 warpB = warp(posB, offset);
             warped = warp(position.xyz, offset);
             normal = cross(warpA - warped, warpB - warped);
-            texcoord = (warped.xy + 1.0)*.5;
-            texcoord = vec2(texcoord.x, 1.0 - texcoord.y);
             gl_Position = projMatrix * viewMatrix * vec4(warped, 1.0);
+            vec3 clip = gl_Position.xyz / gl_Position.w;
+            texcoord = (clip.xy + 1.0)*.5;
+            texcoord.y = 1.0 - texcoord.y;
         }
     </script>
     <script type="glsl" id="frag">
@@ -133,7 +137,7 @@
 
             float specular = pow(clamp(dot(warped, lightReflect), 0.0, 1.0), 6.0);
             float shade = clamp(dot(fragNorm, lightNorm), 0.0, 1.0);
-            float ambient = 0.2;
+            float ambient = 0.3;
 
             vec3 color = texture2D(texture, texcoord).xyz;
             vec3 shaded = clamp(shade*color + ambient*color + specular, 0.0, 1.0);
