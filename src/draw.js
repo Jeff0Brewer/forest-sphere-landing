@@ -52,6 +52,8 @@ const run = () => {
     initBuffer(gl, sphere, gl.STATIC_DRAW)
     initAttribute(gl, 'position', 3, 3, 0, false, Float32Array.BYTES_PER_ELEMENT)
 
+    createTexture(gl, document.getElementById('tex'))
+
     const offsetScale = .0005
     const offsetLocation = gl.getUniformLocation(gl.program, 'offset')
     const tick = time => {

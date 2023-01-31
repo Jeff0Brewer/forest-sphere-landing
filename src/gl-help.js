@@ -72,3 +72,20 @@ const createCubemap = (gl, imageSize, urls, urlTargets) => {
     gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
     return texture
 }
+
+const createTexture = (gl, image) => {
+    const texture = gl.createTexture()
+    gl.bindTexture(gl.TEXTURE_2D, texture)
+
+    // set texture to solid color while image loads
+    const tempColor = new Uint8Array([255, 0, 255, 255])
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, tempColor)
+
+    const loadTex = () => {
+        gl.bindTexture(gl.TEXTURE_2D, texture)
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
+        gl.generateMipMap(gl.TEXTURE_2D) // will error on non power of 2 textures
+    }
+    image.addEventListener('load', loadTex)
+    loadTex() // call in case image loaded
+}
