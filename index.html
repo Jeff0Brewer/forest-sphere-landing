@@ -5,14 +5,6 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <div style="display: none;">
-            <img id="negx" src="cubemap/negx.jpg" />
-            <img id="posx" src="cubemap/posx.jpg" />
-            <img id="negy" src="cubemap/negy.jpg" />
-            <img id="posy" src="cubemap/posy.jpg" />
-            <img id="negz" src="cubemap/negz.jpg" />
-            <img id="posz" src="cubemap/posz.jpg" />
-        </div>
         <canvas id="gl" />
     </body>
     <script type="glsl" id="vert">
@@ -128,14 +120,17 @@
         varying vec3 normal;
         varying vec3 warped;
         void main() {
-            vec3 fragNorm = normalize(normal);
-            vec3 lightPos = vec3(-2.0, 5.0, 5.0);
+            vec3 lightPos = vec3(0.0, 5.0, 2.0);
             vec3 lightNorm = normalize(lightPos - warped);
+            vec3 fragNorm = normalize(normal);
 
+            vec3 lightReflect = 2.0*fragNorm*dot(fragNorm, lightNorm) - lightNorm;
+
+            float specular = pow(clamp(dot(warped, lightReflect), 0.0, 1.0), 4.0);
             float shade = clamp(dot(fragNorm, lightNorm), 0.0, 1.0);
             float ambient = 0.2;
-            vec3 color = vec3(0.0, 1.0, 0.0);
-            vec3 shaded = clamp(shade*color + ambient*color, 0.0, 1.0);
+            vec3 color = vec3(0.0, 0.7, 0.0);
+            vec3 shaded = clamp(shade*color + ambient*color + specular, 0.0, 1.0);
             gl_FragColor = vec4(shaded, 1.0);
         }
     </script>
