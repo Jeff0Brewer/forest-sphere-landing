@@ -1,8 +1,8 @@
 const { mat4 } = glMatrix
 
 const VIEW_MATRIX = mat4.lookAt(mat4.create(),
-    [-1, 0, 4], //eye
-    [-1, 0, 0], //focus
+    [0, 0, 3], //eye
+    [0, 0, 0], //focus
     [0, 1, 0] //up
 )
 
