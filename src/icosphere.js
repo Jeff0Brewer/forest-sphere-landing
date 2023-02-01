@@ -62,18 +62,21 @@ const getIcosphere = iterations => {
     }
 }
 
-const {vertices, triangles} = getIcosphere(5)
+const {vertices: v, triangles: t} = getIcosphere(5)
 
-const icoBuffer = new Float32Array(triangles.length * 9)
-triangles.forEach((triangle, ti) =>
-    triangle.forEach((vertex, vi) =>
-        vertices[vertex].forEach((val, i) => {
-            icoBuffer[ti * 9 + vi * 3 + i] = val
-        })
-    )
-)
+const ico = []
+t.forEach(tri => {
+    tri.forEach(vert => {
+        if (v[vert][2] > 0) {
+            ico.push(...v[vert])
+        }
+    })
+    const rem = ico.length % 9
+    ico.splice(ico.length - rem)
+})
+const icoBuffer = new Float32Array(ico)
 
-fs.writeFile('./ico5.js', `const sphere = new Float32Array([${icoBuffer.toString()}])`, err => {
+fs.writeFile('./src/ico.js', `const sphere = new Float32Array([${icoBuffer.toString()}])`, err => {
   if (err) {
     console.error(err);
   }
