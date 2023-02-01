@@ -112,9 +112,9 @@
         vec3 warp(vec3 pos, float offset) {
             float warpScale = .08;
             float angle = 3.5*atan(pos.x, pos.z);
-            float spin = 2.0*pos.y+angle/3.14159;
-            vec3 noisePos = 0.1*pos + spin;
-            return pos*(1.0 - warpScale) + pos*cnoise(noisePos + offset)*warpScale;
+            float spin = -2.0*pos.y+angle/3.14159;
+            vec3 noisePos = 0.4*pos + spin + offset;
+            return pos*(1.0 - warpScale) + pos*cnoise(noisePos)*warpScale;
         }
 
         vec3 getWarpNorm(vec3 position, vec3 warped) {
