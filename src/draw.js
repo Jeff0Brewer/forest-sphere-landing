@@ -37,7 +37,7 @@ const run = () => {
     )
     initBuffer(gl, sphere, gl.STATIC_DRAW)
     initAttribute(gl, 'position', 3, 3, 0, false, Float32Array.BYTES_PER_ELEMENT)
-    createTexture(gl, 'forest.jpg')
+    createTexture(gl, 'corp.jpg')
 
     const offsetScale = .0003
     const offsetLocation = gl.getUniformLocation(gl.program, 'offset')
