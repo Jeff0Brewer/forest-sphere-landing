@@ -112,9 +112,9 @@
         vec3 warp(vec3 pos, float offset) {
             float warpScale = .08;
             float angle = 3.5*atan(pos.x, pos.z);
-            float spin = 2.0*pos.y+angle/3.14159;
-            vec3 noisePos = 0.1*pos + spin;
-            return pos*(1.0 - warpScale) + pos*cnoise(noisePos + offset)*warpScale;
+            float spin = -2.0*pos.y+angle/3.14159;
+            vec3 noisePos = 0.4*pos + spin + offset;
+            return pos*(1.0 - warpScale) + pos*cnoise(noisePos)*warpScale;
         }
 
         vec3 getWarpNorm(vec3 position, vec3 warped) {
@@ -158,12 +158,12 @@
             vec3 lightNorm = normalize(lightPos - warped);
             vec3 lightReflect = 2.0*fragNorm*dot(fragNorm, lightNorm) - lightNorm;
 
-            float specular = pow(clamp(dot(warped, lightReflect), 0.0, 1.0), 7.0);
+            float specular = pow(clamp(dot(warped, lightReflect), 0.0, 1.0), 8.0);
             float shade = clamp(dot(fragNorm, lightNorm), 0.0, 1.0);
             float ambient = 0.2;
 
-            vec3 color = texture2D(texture, texcoord).xyz;
-            vec3 shaded = clamp(shade*color + ambient*color + specular, 0.0, 1.0);
+            vec3 color = texture2D(texture, texcoord - 1.5*normal.xy).xyz;
+            vec3 shaded = clamp(shade*color + ambient*color + .6*specular, 0.0, 1.0);
             gl_FragColor = vec4(shaded, 1.0);
         }
     </script>
