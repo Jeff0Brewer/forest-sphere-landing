@@ -108,8 +108,8 @@
         varying vec2 texcoord;
 
         vec3 warp(vec3 pos, float offset) {
-            float warpScale = .1;
-            return pos*(1.0 - warpScale) + pos*cnoise(pos + cnoise(pos) + offset)*warpScale;
+            float warpScale = .15;
+            return pos*(1.0 - warpScale) + pos*cnoise(pos + cnoise(1.5*pos) + offset)*warpScale;
         }
 
         vec3 getWarpNorm(vec3 position, vec3 warped) {
@@ -152,9 +152,9 @@
             vec3 lightNorm = normalize(lightPos - warped);
             vec3 lightReflect = 2.0*fragNorm*dot(fragNorm, lightNorm) - lightNorm;
 
-            float specular = pow(clamp(dot(warped, lightReflect), 0.0, 1.0), 6.0);
+            float specular = pow(clamp(dot(warped, lightReflect), 0.0, 1.0), 8.0);
             float shade = clamp(dot(fragNorm, lightNorm), 0.0, 1.0);
-            float ambient = 0.3;
+            float ambient = 0.2;
 
             vec3 color = texture2D(texture, texcoord).xyz;
             vec3 shaded = clamp(shade*color + ambient*color + specular, 0.0, 1.0);
@@ -162,6 +162,6 @@
         }
     </script>
     <script src="src/gl-matrix-min.js"></script>
-    <script src="src/ico.js"></script>
+    <script src="src/ico5.js"></script>
     <script src="src/draw.js"></script>
 </html>

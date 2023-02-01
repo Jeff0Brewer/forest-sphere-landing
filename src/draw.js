@@ -39,7 +39,7 @@ const run = () => {
     initAttribute(gl, 'position', 3, 3, 0, false, Float32Array.BYTES_PER_ELEMENT)
     createTexture(gl, 'forest.jpg')
 
-    const offsetScale = .0005
+    const offsetScale = .0003
     const offsetLocation = gl.getUniformLocation(gl.program, 'offset')
     const tick = time => {
         gl.uniform1f(offsetLocation, time*offsetScale);
