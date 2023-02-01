@@ -98,24 +98,23 @@
         }
 
         attribute vec4 position;
+
         uniform mat4 projMatrix;
         uniform mat4 viewMatrix;
         uniform float offset;
         uniform float screenAspect;
         uniform float imageAspect;
+
         varying vec3 warped;
         varying vec3 normal;
         varying vec2 texcoord;
 
         vec3 warp(vec3 pos, float offset) {
             float warpScale = .08;
-            float angle = atan(pos.x/pos.z)*3.0;
-            float rotation = angle/3.14159+2.0*pos.y;
-            vec3 noisePos = 0.2*pos + rotation;
-            pos = pos*(1.0 - warpScale) + pos*cnoise(noisePos + offset)*warpScale;
-            return pos;
-
-            //return pos*(1.0 - warpScale) + pos*cnoise(pos + cnoise(1.5*pos) + offset)*warpScale;
+            float angle = 3.5*atan(pos.x, pos.z);
+            float spin = 2.0*pos.y+angle/3.14159;
+            vec3 noisePos = 0.1*pos + spin;
+            return pos*(1.0 - warpScale) + pos*cnoise(noisePos + offset)*warpScale;
         }
 
         vec3 getWarpNorm(vec3 position, vec3 warped) {
