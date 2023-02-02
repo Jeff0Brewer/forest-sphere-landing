@@ -1,22 +1,25 @@
-const { mat4 } = glMatrix
-
-const VIEW_MATRIX = mat4.lookAt(mat4.create(),
-    [0, 0, 2.5], //eye
-    [0, 0, 0], //focus
-    [0, 1, 0] //up
-)
-
-const FOV = 40*Math.PI/180
-const getProjMatrix = (aspect) => {
-    return mat4.perspective(mat4.create(),
-        FOV,
-        aspect,
-        0.1, //near
-        10.0 //far
-    )
-}
-
 const NUM_VERTEX = sphere.length/3
+
+const VIEW_MATRIX = new Float32Array([
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, 1, 0,
+    0, 0, -2.5, 1
+])
+
+const FOV = .35
+const NEAR = 0.1
+const FAR = 10.0
+const getProjMatrix = (aspect) => {
+    const rd = 1/(FAR - NEAR)
+    const ct = Math.cos(FOV)/Math.sin(FOV)
+    return new Float32Array([
+        ct/aspect, 0, 0, 0,
+        0, ct, 0, 0,
+        0, 0, -(FAR+NEAR)*rd, -1,
+        0, 0, -2*NEAR*FAR*rd, 0
+    ])
+}
 
 const run = () => {
     const canvas = document.getElementById('gl')
