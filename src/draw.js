@@ -87,7 +87,6 @@ const loadProgram = (gl, vertexSource, fragmentSource) => {
     gl.linkProgram(program)
     gl.useProgram(program)
     gl.program = program
-    return program
 }
 
 const initAttribute = (gl, name, size, stride, offset, normalized, typeSize) => {
