@@ -62,23 +62,26 @@ const getIcosphere = iterations => {
     }
 }
 
-// create vertex buffer from triange vert pairs
+// create vertex buffer from triangle vertex pairs
 const {vertices: v, triangles: t} = getIcosphere(5)
 const ico = []
 t.forEach(tri => {
     tri.forEach(vert => {
+        // exclude vertices on back face of sphere for efficiency
         if (v[vert][2] > 0) {
             ico.push(...v[vert])
         }
     })
+    // remove vertices from partially added triangles
+    // (triangles with > 0 vertices on back face of sphere)
     const rem = ico.length % 9
     ico.splice(ico.length - rem)
 })
 
 // write to js file
+// lower float precision to minimize size
 let out = 'const sphere = new Float32Array(['
-// write as lower precision to minimize size
-ico.forEach(v => out = out + v.toFixed(6) + ',')
+ico.forEach(v => out = out + v.toFixed(5) + ',')
 out = out + '])'
 fs.writeFile('./src/ico.js', out, err => {
   if (err) {
