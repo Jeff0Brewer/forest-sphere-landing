@@ -62,8 +62,8 @@ const getIcosphere = iterations => {
     }
 }
 
+// create vertex buffer from triange vert pairs
 const {vertices: v, triangles: t} = getIcosphere(5)
-
 const ico = []
 t.forEach(tri => {
     tri.forEach(vert => {
@@ -74,9 +74,13 @@ t.forEach(tri => {
     const rem = ico.length % 9
     ico.splice(ico.length - rem)
 })
-const icoBuffer = new Float32Array(ico)
 
-fs.writeFile('./src/ico.js', `const sphere = new Float32Array([${icoBuffer.toString()}])`, err => {
+// write to js file
+let out = 'const sphere = new Float32Array(['
+// write as lower precision to minimize size
+ico.forEach(v => out = out + v.toFixed(6) + ',')
+out = out + '])'
+fs.writeFile('./src/ico.js', out, err => {
   if (err) {
     console.error(err);
   }
