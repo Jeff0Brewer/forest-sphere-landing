@@ -78,7 +78,7 @@ t.forEach(tri => {
 // write to js file
 let out = 'const sphere = new Float32Array(['
 // write as lower precision to minimize size
-ico.forEach(v => out = out + v.toFixed(6) + ',')
+ico.forEach(v => out = out + v.toFixed(5) + ',')
 out = out + '])'
 fs.writeFile('./src/ico.js', out, err => {
   if (err) {
