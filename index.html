@@ -112,8 +112,8 @@
         vec3 warp(vec3 pos, float offset) {
             float warpScale = .08;
             float angle = 3.5*atan(pos.x, pos.z);
-            float spin = -2.0*pos.y+angle/3.14159;
-            vec3 noisePos = 0.4*pos + spin + offset;
+            float spin = 3.0*pos.y+angle/3.14159;
+            vec3 noisePos = 0.4*pos + spin - offset;
             return pos*(1.0 - warpScale) + pos*cnoise(noisePos)*warpScale;
         }
 
@@ -154,7 +154,7 @@
         uniform sampler2D texture;
         void main() {
             vec3 fragNorm = normalize(normal);
-            vec3 lightPos = vec3(0.0, 10.0, 8.0);
+            vec3 lightPos = vec3(0.0, 8.0, 11.0);
             vec3 lightNorm = normalize(lightPos - warped);
             vec3 lightReflect = 2.0*fragNorm*dot(fragNorm, lightNorm) - lightNorm;
 
