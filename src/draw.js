@@ -108,7 +108,7 @@ const createTexture = (gl, url) => {
     gl.bindTexture(gl.TEXTURE_2D, texture)
 
     // set texture to solid color while image loads
-    const tempColor = new Uint8Array([255, 0, 255, 255])
+    const tempColor = new Uint8Array([255, 255, 255, 255])
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, tempColor)
 
     const img = new Image()
