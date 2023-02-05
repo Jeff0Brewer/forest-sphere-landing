@@ -38,7 +38,7 @@ const VIEW_MATRIX = new Float32Array([
     1, 0, 0, 0,
     0, 1, 0, 0,
     0, 0, 1, 0,
-    0, 0, -2.5, 1
+    0, 0, -3, 1
 ])
 
 // set static args for proj matrix, calc from aspect on screen change
