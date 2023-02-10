@@ -141,16 +141,15 @@ const FRAGMENT_SHADER = `
         }
 `
 
-const run = () => {
+const run = parent => {
     // create and add elements for wix compatibility
     const wrap = document.createElement('div')
     const canvas = document.createElement('canvas')
     wrap.style.position = 'absolute'
     wrap.style.top = '0'
     wrap.style.left = '0'
-    wrap.style.marginTop = '80px'
-    wrap.style.height = 'max(70vh, 500px)'
-    wrap.style.width = '100vw'
+    wrap.style.height = '100%'
+    wrap.style.width = '100%'
     wrap.style.backgroundSize = 'cover'
     wrap.style.backgroudPositon = 'center'
     wrap.style.backgroundImage = `url('${IMG_URL}')`
@@ -158,7 +157,7 @@ const run = () => {
     canvas.style.height = '100%'
     canvas.style.width = '100%'
     wrap.appendChild(canvas)
-    document.body.appendChild(wrap)
+    parent.appendChild(wrap)
 
     const gl = canvas.getContext('webgl')
     gl.enable(gl.DEPTH_TEST)
@@ -180,12 +179,12 @@ const run = () => {
     // start draw loop
     const offsetSpeed = .00025
     const offsetLoc = gl.getUniformLocation(gl.program, 'offset')
-    const tick = time => {
-        gl.uniform1f(offsetLoc, time*offsetSpeed);
+    const draw = time => {
+        gl.uniform1f(offsetLoc, time*offsetSpeed)
         gl.drawArrays(gl.TRIANGLES, 0, NUM_VERTEX)
-        window.requestAnimationFrame(tick)
+        window.requestAnimationFrame(draw)
     }
-    window.requestAnimationFrame(tick)
+    window.requestAnimationFrame(draw)
 }
 
 const NUM_VERTEX = sphere.length/3
@@ -273,9 +272,9 @@ const createTexture = (gl, url) => {
     img.addEventListener('load', () => {
         gl.bindTexture(gl.TEXTURE_2D, texture)
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img)
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
 
         //set image aspect ratio uniform when image loaded
         gl.uniform1f(gl.getUniformLocation(gl.program, 'imageAspect'), img.width/img.height)
@@ -284,11 +283,11 @@ const createTexture = (gl, url) => {
 
 class SphereLanding extends HTMLElement {
     constructor() {
-        super();
+        super()
     }
 
     connectedCallback() {
-        run()
+        run(this)
     }
 }
-customElements.define('sphere-landing', SphereLanding);
+customElements.define('sphere-landing', SphereLanding)
